@@ -16,17 +16,34 @@ gpkg_path = "well_datapoints.gpkg"
 
 # --- Cached loaders ---
 @st.cache_data
-def load_geojson(path):
+def load_geojson(path, simplify_factor=10):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     if data.get("type") == "Feature":
         data = {"type": "FeatureCollection", "features": [data]}
+    elif data.get("type") == "Geometry":
+        data = {
+            "type": "FeatureCollection",
+            "features": [{"type": "Feature", "geometry": data, "properties": {}}],
+        }
 
-    # Simplify geometry — tolerance in degrees (~10m at this latitude)
+    # Thin out coordinates by only keeping every Nth point
+    def simplify_coords(obj):
+        if isinstance(obj, list):
+            # If it's a list of coordinate pairs, thin it out
+            if len(obj) > 1 and isinstance(obj[0], list) and len(obj[0]) == 2:
+                thinned = obj[::simplify_factor]
+                # Always keep the last point to close the polygon
+                if thinned[-1] != obj[-1]:
+                    thinned.append(obj[-1])
+                return thinned
+            return [simplify_coords(item) for item in obj]
+        return obj
+
     for feature in data["features"]:
-        geom = shape(feature["geometry"])
-        geom = simplify(geom, tolerance=0.0001, preserve_topology=True)
-        feature["geometry"] = geom.__geo_interface__
+        feature["geometry"]["coordinates"] = simplify_coords(
+            feature["geometry"]["coordinates"]
+        )
 
     return data
 
