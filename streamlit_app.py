@@ -16,7 +16,7 @@ gpkg_path = "well_datapoints.gpkg"
 
 # --- Cached loaders ---
 @st.cache_data
-def load_geojson(path, simplify_factor=10):
+def load_geojson(path, simplify_factor=20):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     if data.get("type") == "Feature":
