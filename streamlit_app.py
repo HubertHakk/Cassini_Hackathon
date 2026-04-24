@@ -113,6 +113,33 @@ except FileNotFoundError:
 except Exception as e:
     st.sidebar.warning(f"GeoJSON error: {e}")
 
+    geojson_data = None
+try:
+    geojson_data = load_geojson(geojson_path)
+
+    all_coords = []
+    def recurse(obj):
+        if isinstance(obj, list):
+            if len(obj) >= 2 and all(isinstance(v, (int, float)) for v in obj[:2]):
+                all_coords.append((obj[0], obj[1]))
+            else:
+                for item in obj:
+                    recurse(item)
+        elif isinstance(obj, dict):
+            for v in obj.values():
+                recurse(v)
+    recurse(geojson_data)
+
+    if all_coords:
+        lons, lats = [c[0] for c in all_coords], [c[1] for c in all_coords]
+        bounds_list.append((min(lons), min(lats), max(lons), max(lats)))
+
+except FileNotFoundError:
+    st.sidebar.warning("DHSegura.geojson not found")
+except Exception as e:
+    st.sidebar.warning(f"GeoJSON error: {e}")
+
+
 # --- GeoPackage layer ---
 gpkg_geojson = None
 selected_layer = None
