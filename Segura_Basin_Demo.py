@@ -17,19 +17,31 @@ st.write("This demo showcases the application of Well-D developed software to de
 
 
 st.header("Why is this problem important?")
-st.write("Unregistered wells can lead to over-extraction of groundwater, which in turn can cause land subsidence, reduced water quality, and depletion of water resources.\
-         By identifying and monitoring these wells, governments struggling with water management can better manage water resources and mitigate potential environmental impacts.")
-st.write("More specifically, in the Segura River Basin, water scarcity is a significant issue, with the sustainable rate of water extraction from the Segura Basin aquifers\
-         being exceeded 3- or 4-fold. Moreover, unregistered wells - which are estimated to account for around 45% of all extracted ground water\
-         in the area -contribute to the over-extraction of groundwater. By using Well-D, we aim to help identify these wells and support\
-          sustainable water management in the region.")
-st.write("The Water Authorities’ inability to stop this activity is due to lack of instruments for water management and law enforcement.\
-          In some cases, there is also a lack of political willingness to allow the strict application of the law, which would discourage the ever-increasing illegal use.\
-            Nevertheless, the main reason that water is abstracted illegally lies in the huge profits that are derived from its use (irrigation farming, urban development,\
-          tourism). Because of this, river basin authorities are under great economic and political pressure, especially in those areas where the problem is more severe\
-          (Andalusia, Castilla-La Mancha, Murcia, Valencia) resulting in illegal water use not being effectively tackled.")
-st.write("Thus, Well-D is designed to provide a cost-effective and scalable solution for detecting unregistered wells, enabling authorities to take informed actions\
-          to manage water resources sustainably - even at a more central level of the Spanish central government, bypassing traditional limitations of relying on local enforcement.")
+
+st.markdown("""
+    <div style="
+        background-color: #736D6C;
+        border-radius: 20px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        color: white;
+            ">
+    Unregistered wells can lead to over-extraction of groundwater, which in turn can cause land subsidence, reduced water quality, and depletion of water resources.\
+             By identifying and monitoring these wells, governments struggling with water management can better manage water resources and mitigate potential environmental impacts.
+    <br><br>More specifically, in the Segura River Basin, water scarcity is a significant issue, with the sustainable rate of water extraction from the Segura Basin aquifers\
+             being exceeded 3- or 4-fold. Moreover, unregistered wells - which are estimated to account for around 45% of all extracted ground water\
+             in the area -contribute to the over-extraction of groundwater. By using Well-D, we aim to help identify these wells and support\
+              sustainable water management in the region.
+    <br><br>The Water Authorities’ inability to stop this activity is due to lack of instruments for water management and law enforcement.\
+              In some cases, there is also a lack of political willingness to allow the strict application of the law, which would discourage the ever-increasing illegal use.\
+                Nevertheless, the main reason that water is abstracted illegally lies in the huge profits that are derived from its use (irrigation farming, urban development,\
+              tourism). Because of this, river basin authorities are under great economic and political pressure, especially in those areas where the problem is more severe\
+              (Andalusia, Castilla-La Mancha, Murcia, Valencia) resulting in illegal water use not being effectively tackled.
+    <br><br>Thus, Well-D is designed to provide a cost-effective and scalable solution for detecting unregistered wells, enabling authorities to take informed actions\
+              to manage water resources sustainably - even at a more central level of the Spanish central government, bypassing traditional limitations of relying on local enforcement.
+    </div>
+""", unsafe_allow_html=True)
+
 geojson_path = "DHSegura.geojson"
 gpkg_path = "well_datapoints.gpkg"
 
@@ -181,7 +193,7 @@ def render_map(show_geojson, show_gpkg, view_state):
         layers.append(pdk.Layer(
             "GeoJsonLayer", geojson_data,
             pickable=False, stroked=True, filled=True,
-            get_fill_color=[0, 128, 255, 80],
+            get_fill_color=[0, 128, 128, 80],
             get_line_color=[0, 80, 160, 200],
             line_width_min_pixels=1,
         ))
@@ -189,7 +201,7 @@ def render_map(show_geojson, show_gpkg, view_state):
         layers.append(pdk.Layer(
             "GeoJsonLayer", gpkg_geojson,
             pickable=True, stroked=True, filled=True,
-            get_fill_color=[255, 100, 0, 180],
+            get_fill_color=[245, 95, 116, 180],
             get_line_color=[200, 60, 0, 220],
             point_radius_min_pixels=4,
             line_width_min_pixels=1,
