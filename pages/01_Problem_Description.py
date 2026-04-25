@@ -8,7 +8,7 @@ st.title("The Segura River Basin — Problem Description")
 # --- Dashboard context ---
 st.subheader("About This Dashboard")
 st.markdown("""
-This dashboard visualises the hydrogeological monitoring network of the DHSegura basin,
+This dashboard visualises the hydrogeological monitoring network of the Segura basin,
 including the locations and attributes of active wells across the region.
 """)
 
