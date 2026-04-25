@@ -171,5 +171,15 @@ con = sqlite3.connect(gpkg_path)
 df = pd.read_sql("SELECT COTA_msnm FROM puntos_agua_DHSegura", con)
 con.close()
 
-df['elevation_bin'] = pd.cut(df['COTA_msnm'], bins=range(0.0, 2100.0, 100))
-st.bar_chart(df['elevation_bin'].value_counts().sort_index())
+df = df.dropna(subset=['COTA_msnm'])
+bins = range(0, 2100, 100)
+
+df['elevation_bin'] = pd.cut(df['COTA_msnm'], bins=bins)
+counts = df['elevation_bin'].value_counts().reset_index()
+counts.columns = ['Elevation (m)', 'Wells']
+counts = counts.sort_values('Elevation (m)', key=lambda s: s.apply(lambda x: x.left))
+
+# Format as "0-100", "100-200", etc.
+counts['Elevation (m)'] = counts['Elevation (m)'].apply(lambda x: f"{int(x.left)}-{int(x.right)}")
+
+st.bar_chart(counts, x='Elevation (m)', y='Wells')
