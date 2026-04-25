@@ -15,7 +15,7 @@ gpkg_path = "well_datapoints.gpkg"
 # --- Cached loaders ---
 
 @st.cache_data
-def load_geojson(path, simplify_factor=50):
+def load_geojson(path, simplify_factor=15):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     if data.get("type") == "Feature":
@@ -45,6 +45,8 @@ def list_gpkg_layers(path):
     con.close()
     return tables["table_name"].tolist()
 
+
+
 @st.cache_data
 def load_gpkg_layer(path, layer_name):
     con = sqlite3.connect(path)
@@ -53,10 +55,18 @@ def load_gpkg_layer(path, layer_name):
         con,
     )["column_name"].iloc[0]
     useful_cols = [
-        "Municipio", "COTA_msnm", "Usos_Agua", "Naturaleza", geom_col]
-
-    df = pd.read_sql(f'SELECT {", ".join(useful_cols)} FROM "{layer_name}"', con)
+        "Municipio", "Provincia", "COTA_msnm", "Usos_Agua", "Naturaleza",
+        "PROF_m", "Caudal_Referencia_L_s", "FECHA_OBRA",
+        "Sistema_Acuifero", "Unidad_Hidrogeologica", "Cuenca_Hidrografica",
+        geom_col,
+    ]
+    # filter out inactive wells directly in the query
+    df = pd.read_sql(
+        f'SELECT {", ".join(useful_cols)} FROM "{layer_name}" WHERE "Usos_Agua" NOT IN ("No se utiliza", "Desconocido")',
+        con
+    )
     con.close()
+
     features = []
     for _, row in df.iterrows():
         raw = row[geom_col]
@@ -78,7 +88,9 @@ def load_gpkg_layer(path, layer_name):
         })
     return {"type": "FeatureCollection", "features": features}
 
-def compute_view_from_bounds(bounds_list, zoom=12):
+
+
+def compute_view_from_bounds(bounds_list, zoom=8):
     minx = min(b[0] for b in bounds_list)
     miny = min(b[1] for b in bounds_list)
     maxx = max(b[2] for b in bounds_list)
@@ -124,6 +136,7 @@ except Exception as e:
 
 # --- Sidebar ---
 st.sidebar.title("Map Layers")
+
 show_geojson = st.sidebar.toggle("DHSegura boundary", value=True, disabled=geojson_data is None)
 show_gpkg = st.sidebar.toggle("Well datapoints", value=True, disabled=gpkg_geojson is None)
 st.sidebar.divider()
