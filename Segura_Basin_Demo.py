@@ -25,8 +25,8 @@ st.markdown("""
         padding: 0.75rem 1rem;
         font-size: 1rem;
         color: white;
-            ">This demo showcases the application of Well-D developed software to detect unregistered wells in the Segura River Basin, Spain.\
-          The map below displays the boundary of theSegura river basin as well as the detected well locations. Use the sidebar to toggle layers and explore the data. </div>
+            ">This demo showcases the application of Well-D developed software to detect unregistered wells in the Segura river basin, Spain.\
+          The map below displays the boundary of the Segura river basin as well as the detected well locations. Use the sidebar to toggle layers and explore the data. </div>
 """, unsafe_allow_html=True)
 st.space("small")
 
@@ -163,8 +163,7 @@ except Exception as e:
 if "selected_date" not in st.session_state:
     st.session_state.selected_date = None
 
-# --- Sidebar time slider ---
-st.sidebar.subheader("Time")
+# --- Time slider ---
 
 selected_date = st.select_slider(
     "Select date",
