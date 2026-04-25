@@ -179,7 +179,7 @@ st.session_state.selected_date = selected_date
 # --- Sidebar ---
 st.sidebar.title("Map Layers")
 
-show_geojson = st.sidebar.toggle("DHSegura boundary", value=True, disabled=geojson_data is None)
+show_geojson = st.sidebar.toggle("Segura Basin boundary", value=True, disabled=geojson_data is None)
 show_gpkg = st.sidebar.toggle("Well datapoints", value=True, disabled=gpkg_geojson is None)
 st.sidebar.divider()
 st.sidebar.subheader("Legend")
