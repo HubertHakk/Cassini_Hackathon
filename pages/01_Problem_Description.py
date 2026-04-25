@@ -4,10 +4,15 @@ import streamlit as st
 st.set_page_config(page_title="Problem Description", layout="wide")
 
 st.title("The Segura River Basin — Problem Description")
-st.caption("Confederación Hidrográfica del Segura (CHS)")
+
+# --- Dashboard context ---
+st.subheader("About This Dashboard")
+st.markdown("""
+This dashboard visualises the hydrogeological monitoring network of the DHSegura basin,
+including the locations and attributes of active wells across the region.
+""")
 
 st.divider()
-
 # --- Overview ---
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Basin area", "18,870 km²")
@@ -16,36 +21,6 @@ col3.metric("Irrigated surface", "269,000 ha")
 col4.metric("Aquifer bodies", "63")
 
 st.divider()
-
-# --- Geography ---
-st.subheader("Geography & Climate")
-st.markdown("""
-The Segura River originates in the mountains of Jaén (Andalucía) and flows southeast through
-semiarid lands before discharging into the Mediterranean Sea near Alicante. The basin spans
-four autonomous communities — Murcia (60%), Castilla-La Mancha (25%), Andalucía (9%), and
-Comunitat Valenciana (5%) — and covers nearly 19,000 km².
-
-The basin is characterised by significant topographic variation: mountains in the northwest
-frequently exceed 1,000 m, while coastal plains and river valleys sit below 200 m. This
-variation drives strong climatic contrasts, from severe droughts and heat waves to torrential
-rainfall events. Average annual precipitation is around 385 mm, with two-thirds typically
-falling in autumn, but with extreme spatial and temporal variability across the basin.
-""")
-
-# --- Hydrogeology ---
-st.subheader("Hydrogeology")
-st.markdown("""
-The basin has a complex hydrogeological structure, with 63 officially recognised groundwater
-bodies managed by the Confederación Hidrográfica del Segura (CHS). Two main aquifer types
-are present: **carbonate aquifers** (limestone and dolomite, ranging from Triassic–Jurassic
-to Pliocene–Quaternary age) and **detrital aquifers** (gravel, sand, silt, and calcarenites).
-Depending on local geology, these units behave either as independent systems or as
-hydraulically connected networks.
-
-Aquifer recharge occurs primarily through rainwater infiltration, river-aquifer interaction,
-and irrigation return flows. Groundwater is particularly critical in coastal areas where
-surface water resources are scarce or absent.
-""")
 
 # --- Water scarcity ---
 st.subheader("Water Scarcity & Demand")
@@ -107,16 +82,37 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# --- Geography ---
+st.subheader("Geography & Climate")
+st.markdown("""
+The Segura River originates in the mountains of Jaén (Andalucía) and flows southeast through
+semiarid lands before discharging into the Mediterranean Sea near Alicante. The basin spans
+four autonomous communities — Murcia (60%), Castilla-La Mancha (25%), Andalucía (9%), and
+Comunitat Valenciana (5%) — and covers nearly 19,000 km².
+
+The basin is characterised by significant topographic variation: mountains in the northwest
+frequently exceed 1,000 m, while coastal plains and river valleys sit below 200 m. This
+variation drives strong climatic contrasts, from severe droughts and heat waves to torrential
+rainfall events. Average annual precipitation is around 385 mm, with two-thirds typically
+falling in autumn, but with extreme spatial and temporal variability across the basin.
+""")
+
+# --- Hydrogeology ---
+st.subheader("Hydrogeology")
+st.markdown("""
+The basin has a complex hydrogeological structure, with 63 officially recognised groundwater
+bodies managed by the Confederación Hidrográfica del Segura (CHS). Two main aquifer types
+are present: **carbonate aquifers** (limestone and dolomite, ranging from Triassic–Jurassic
+to Pliocene–Quaternary age) and **detrital aquifers** (gravel, sand, silt, and calcarenites).
+Depending on local geology, these units behave either as independent systems or as
+hydraulically connected networks.
+
+Aquifer recharge occurs primarily through rainwater infiltration, river-aquifer interaction,
+and irrigation return flows. Groundwater is particularly critical in coastal areas where
+surface water resources are scarce or absent.
+""")
+
+
+
 st.markdown("")
 
-# --- Dashboard context ---
-st.subheader("About This Dashboard")
-st.markdown("""
-This dashboard visualises the hydrogeological monitoring network of the DHSegura basin,
-including the locations and attributes of active wells across the region. It is intended
-as an analytical tool to support the study of groundwater dynamics, extraction patterns,
-and their relationship to ground subsidence.
-
-Data is sourced from the Confederación Hidrográfica del Segura (CHS) and covers active
-monitoring and extraction wells across the basin boundary.
-""")

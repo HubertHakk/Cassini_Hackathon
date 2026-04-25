@@ -186,6 +186,7 @@ view_state = compute_view_from_bounds(bounds_list) if bounds_list else pdk.ViewS
 )
 
 
+
 @st.fragment
 def render_map(show_geojson, show_gpkg, view_state):
     layers = []
@@ -216,4 +217,5 @@ def render_map(show_geojson, show_gpkg, view_state):
     else:
         st.info("All layers are hidden. Toggle a layer in the sidebar to show it.")
 
+st.space("small")
 render_map(show_geojson, show_gpkg, view_state)
