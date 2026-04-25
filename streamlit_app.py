@@ -13,8 +13,9 @@ gpkg_path = "well_datapoints.gpkg"
 
 
 # --- Cached loaders ---
+
 @st.cache_data
-def load_geojson(path, simplify_factor=15):
+def load_geojson(path, simplify_factor=50):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     if data.get("type") == "Feature":
@@ -51,12 +52,11 @@ def load_gpkg_layer(path, layer_name):
         f"SELECT column_name FROM gpkg_geometry_columns WHERE table_name='{layer_name}'",
         con,
     )["column_name"].iloc[0]
+    useful_cols = [
+        "Municipio", "COTA_msnm", "Usos_Agua", "Naturaleza", geom_col]
 
-    # ← Only load the columns we actually need instead of SELECT *
-    useful_cols = ["Municipio", "COTA_msnm", "Usos_Agua", "Naturaleza", geom_col]
     df = pd.read_sql(f'SELECT {", ".join(useful_cols)} FROM "{layer_name}"', con)
     con.close()
-
     features = []
     for _, row in df.iterrows():
         raw = row[geom_col]
@@ -78,7 +78,7 @@ def load_gpkg_layer(path, layer_name):
         })
     return {"type": "FeatureCollection", "features": features}
 
-def compute_view_from_bounds(bounds_list, zoom=7):
+def compute_view_from_bounds(bounds_list, zoom=12):
     minx = min(b[0] for b in bounds_list)
     miny = min(b[1] for b in bounds_list)
     maxx = max(b[2] for b in bounds_list)
@@ -113,7 +113,8 @@ except Exception as e:
 try:
     available_layers = list_gpkg_layers(gpkg_path)
     gpkg_geojson = load_gpkg_layer(gpkg_path, available_layers[0])
-    point_features = [f for f in gpkg_geojson["features"] if f["geometry"]["type"] == "Point"]
+    features = gpkg_geojson["features"]
+    point_features = [f for f in features if f["geometry"]["type"] == "Point"]
     if point_features:
         lons = [f["geometry"]["coordinates"][0] for f in point_features]
         lats = [f["geometry"]["coordinates"][1] for f in point_features]
@@ -133,7 +134,9 @@ if gpkg_geojson:
     st.sidebar.markdown("🟠 Well datapoints")
 
 # --- Render ---
-view_state = compute_view_from_bounds(bounds_list) if bounds_list else pdk.ViewState(latitude=0, longitude=0, zoom=2)
+view_state = compute_view_from_bounds(bounds_list) if bounds_list else pdk.ViewState(
+    latitude=0, longitude=0, zoom=2
+)
 
 @st.fragment
 def render_map(show_geojson, show_gpkg, view_state):
@@ -166,20 +169,3 @@ def render_map(show_geojson, show_gpkg, view_state):
         st.info("All layers are hidden. Toggle a layer in the sidebar to show it.")
 
 render_map(show_geojson, show_gpkg, view_state)
-
-con = sqlite3.connect(gpkg_path)
-df = pd.read_sql("SELECT COTA_msnm FROM puntos_agua_DHSegura", con)
-con.close()
-
-df = df.dropna(subset=['COTA_msnm'])
-bins = range(0, 2100, 100)
-
-df['elevation_bin'] = pd.cut(df['COTA_msnm'], bins=bins)
-counts = df['elevation_bin'].value_counts().reset_index()
-counts.columns = ['Elevation (m)', 'Wells']
-counts = counts.sort_values('Elevation (m)', key=lambda s: s.apply(lambda x: x.left))
-
-# Format as "0-100", "100-200", etc.
-counts['Elevation (m)'] = counts['Elevation (m)'].apply(lambda x: f"{int(x.left)}-{int(x.right)}")
-
-st.bar_chart(counts, x='Elevation (m)', y='Wells')
