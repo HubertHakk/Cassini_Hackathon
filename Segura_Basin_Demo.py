@@ -5,7 +5,11 @@ import sqlite3
 import pandas as pd
 from shapely import wkb
 
+
+
 st.set_page_config(page_title="Well-D: Well Detection software", layout="wide")
+
+
 st.title("Well-D: Well Detection software")
 
 st.write("Welcome to the Well-D demo! This application demonstrates the use of our software to detect unregistered wells in the Segura River Basin, Spain.\
@@ -16,34 +20,10 @@ st.write("This demo showcases the application of Well-D developed software to de
           The map below displays the boundary of theSegura river basin as well as the detected well locations. Use the sidebar to toggle layers and explore the data.")
 
 
-st.header("Why is this problem important?")
-
-st.markdown("""
-    <div style="
-        background-color: #736D6C;
-        border-radius: 20px;
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        color: white;
-            ">
-    Unregistered wells can lead to over-extraction of groundwater, which in turn can cause land subsidence, reduced water quality, and depletion of water resources.\
-             By identifying and monitoring these wells, governments struggling with water management can better manage water resources and mitigate potential environmental impacts.
-    <br><br>More specifically, in the Segura River Basin, water scarcity is a significant issue, with the sustainable rate of water extraction from the Segura Basin aquifers\
-             being exceeded 3- or 4-fold. Moreover, unregistered wells - which are estimated to account for around 45% of all extracted ground water\
-             in the area -contribute to the over-extraction of groundwater. By using Well-D, we aim to help identify these wells and support\
-              sustainable water management in the region.
-    <br><br>The Water Authorities’ inability to stop this activity is due to lack of instruments for water management and law enforcement.\
-              In some cases, there is also a lack of political willingness to allow the strict application of the law, which would discourage the ever-increasing illegal use.\
-                Nevertheless, the main reason that water is abstracted illegally lies in the huge profits that are derived from its use (irrigation farming, urban development,\
-              tourism). Because of this, river basin authorities are under great economic and political pressure, especially in those areas where the problem is more severe\
-              (Andalusia, Castilla-La Mancha, Murcia, Valencia) resulting in illegal water use not being effectively tackled.
-    <br><br>Thus, Well-D is designed to provide a cost-effective and scalable solution for detecting unregistered wells, enabling authorities to take informed actions\
-              to manage water resources sustainably - even at a more central level of the Spanish central government, bypassing traditional limitations of relying on local enforcement.
-    </div>
-""", unsafe_allow_html=True)
 
 geojson_path = "DHSegura.geojson"
 gpkg_path = "well_datapoints.gpkg"
+
 
 
 # --- Cached loaders ---
@@ -123,6 +103,8 @@ def load_gpkg_layer(path, layer_name):
     return {"type": "FeatureCollection", "features": features}
 
 
+ ### Date selector
+
 
 def compute_view_from_bounds(bounds_list, zoom=8):
     minx = min(b[0] for b in bounds_list)
@@ -168,6 +150,23 @@ try:
 except Exception as e:
     st.sidebar.warning(f"GeoPackage error: {e}")
 
+
+if "selected_date" not in st.session_state:
+    st.session_state.selected_date = None
+
+# --- Sidebar time slider ---
+st.sidebar.subheader("Time")
+
+selected_date = st.select_slider(
+    "Select date",
+    options=["2020-01-01", "2020-02-01"],          # replace with your actual date list when available
+    value=None,
+    disabled=True,       # disabled until time-based data is loaded
+    help="Time selection will be enabled when temporal data is available."
+)
+
+st.session_state.selected_date = selected_date
+
 # --- Sidebar ---
 st.sidebar.title("Map Layers")
 
@@ -184,8 +183,6 @@ if gpkg_geojson:
 view_state = compute_view_from_bounds(bounds_list) if bounds_list else pdk.ViewState(
     latitude=0, longitude=0, zoom=2
 )
-
-
 
 @st.fragment
 def render_map(show_geojson, show_gpkg, view_state):
@@ -217,5 +214,33 @@ def render_map(show_geojson, show_gpkg, view_state):
     else:
         st.info("All layers are hidden. Toggle a layer in the sidebar to show it.")
 
-st.space("small")
+
 render_map(show_geojson, show_gpkg, view_state)
+st.space("small")
+
+
+st.header("Why is solving this problem important?")
+
+st.markdown("""
+    <div style="
+        background-color: #736D6C;
+        border-radius: 20px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        color: white;
+            ">
+    Unregistered wells can lead to over-extraction of groundwater, which in turn can cause land subsidence, reduced water quality, and depletion of water resources.\
+             By identifying and monitoring these wells, governments struggling with water management can better manage water resources and mitigate potential environmental impacts.
+    <br><br>More specifically, in the Segura River Basin, water scarcity is a significant issue, with the sustainable rate of water extraction from the Segura Basin aquifers\
+             being exceeded 3- or 4-fold. Moreover, unregistered wells - which are estimated to account for around 45% of all extracted ground water\
+             in the area -contribute to the over-extraction of groundwater. By using Well-D, we aim to help identify these wells and support\
+              sustainable water management in the region.
+    <br><br>The Water Authorities’ inability to stop this activity is due to lack of instruments for water management and law enforcement.\
+              In some cases, there is also a lack of political willingness to allow the strict application of the law, which would discourage the ever-increasing illegal use.\
+                Nevertheless, the main reason that water is abstracted illegally lies in the huge profits that are derived from its use (irrigation farming, urban development,\
+              tourism). Because of this, river basin authorities are under great economic and political pressure, especially in those areas where the problem is more severe\
+              (Andalusia, Castilla-La Mancha, Murcia, Valencia) resulting in illegal water use not being effectively tackled.
+    <br><br>Thus, Well-D is designed to provide a cost-effective and scalable solution for detecting unregistered wells, enabling authorities to take informed actions\
+              to manage water resources sustainably - even at a more central level of the Spanish central government, bypassing traditional limitations of relying on local enforcement.
+    </div>
+""", unsafe_allow_html=True)

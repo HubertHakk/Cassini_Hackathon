@@ -1,7 +1,0 @@
-[theme]
-base = "dark"
-backgroundColor = "#1a1a2e"        # main background
-secondaryBackgroundColor = "#25253a" # sidebar and widget backgrounds
-textColor = "#e0e0e0"
-primaryColor = "#4a9eff"           # accent color for buttons, sliders etc.
-
