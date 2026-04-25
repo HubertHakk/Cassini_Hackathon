@@ -16,10 +16,19 @@ st.write("Welcome to the Well-D demo! This application demonstrates the use of o
          \n\nUse the sidebar to toggle the visibility of the Segura Basin boundary and the detected well locations.")
 
 st.header("Unregistered Well Detection in the Segura River Basin, Spain")
-st.write("This demo showcases the application of Well-D developed software to detect unregistered wells in the Segura River Basin, Spain.\
-          The map below displays the boundary of theSegura river basin as well as the detected well locations. Use the sidebar to toggle layers and explore the data.")
+st.write("")
 
-
+st.markdown("""
+    <div style="
+        background-color: #8cc5e3;
+        border-radius: 20px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        color: white;
+            ">This demo showcases the application of Well-D developed software to detect unregistered wells in the Segura River Basin, Spain.\
+          The map below displays the boundary of theSegura river basin as well as the detected well locations. Use the sidebar to toggle layers and explore the data. </div>
+""", unsafe_allow_html=True)
+st.space("small")
 
 geojson_path = "DHSegura.geojson"
 gpkg_path = "well_datapoints.gpkg"
