@@ -13,7 +13,15 @@ import base64
 import tempfile, os
 
 
-
+st.markdown("""
+<style>
+.block-container {
+    max-width: 90% !important;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+</style>
+""", unsafe_allow_html=True)
 #st.set_page_config(page_title="Well-D: Well Detection software", layout="wide")
 
 
@@ -327,7 +335,7 @@ if velocity_data:
     vmin = np.percentile(data[~mask], 2)
     vmax = np.percentile(data[~mask], 98)
 
-    st.sidebar.write(f"Velocity range: {vmin:.2f} to {vmax:.2f} mm/yr")
+    #st.sidebar.write(f"Velocity range: {vmin:.2f} to {vmax:.2f} mm/yr")
 
 
 
