@@ -233,14 +233,41 @@ def render_velocity_image(data, mask, cmap_name):
     return tmp_path, float(vmin), float(vmax)
 
 
+def sample_velocity_at_points(gpkg_geojson, velocity_data):
+    data, mask, bounds = velocity_data
+    west, south, east, north = bounds
+
+    h, w = data.shape
+
+    def lonlat_to_pixel(lon, lat):
+        x = int((lon - west) / (east - west) * (w - 1))
+        y = int((north - lat) / (north - south) * (h - 1))  # flip Y
+        return x, y
+
+    for feature in gpkg_geojson["features"]:
+        if feature["geometry"]["type"] != "Point":
+            continue
+
+        lon, lat = feature["geometry"]["coordinates"]
+        x, y = lonlat_to_pixel(lon, lat)
+
+        if 0 <= x < w and 0 <= y < h and not mask[y, x]:
+            velocity = float(data[y, x])
+        else:
+            velocity = None
+
+        feature["properties"]["velocity"] = (
+    round(float(velocity), 3) if velocity is not None else None
+)
+
+    return gpkg_geojson
+
 # --- Load data ---
 #######################################
 geojson_data, gpkg_geojson = None, None
 bounds_list = []
 
 velocity_data, vel_min, vel_max = None, 0, 0
-
-# Temporary debug — remove after fixing
 
 
 try:
@@ -282,7 +309,8 @@ try:
 except Exception as e:
     st.sidebar.warning(f"GeoPackage error: {e}")
 
-
+if gpkg_geojson and velocity_data:
+    gpkg_geojson = sample_velocity_at_points(gpkg_geojson, velocity_data)
 
 if "selected_date" not in st.session_state:
     st.session_state.selected_date = None
@@ -393,7 +421,8 @@ def render_map(show_geojson, show_gpkg, show_velocity, view_state, selected_cmap
         initial_view_state=view_state,
         map_provider="carto",
         map_style=st.session_state.selected_style,
-        tooltip={"text": "📍 {Municipio}\n🏔 {COTA_msnm}m\n💧 {Usos_Agua}\n📉 Velocity: {velocity} mm/yr"},
+        tooltip={
+    "text": "📍 {Municipio}\n🏔 {COTA_msnm}m\n💧 {Usos_Agua}\n📉 Velocity: {velocity} mm/yr"},
     ))
 
 render_map(show_geojson, show_gpkg, show_velocity, view_state, selected_cmap=selected_cmap)
