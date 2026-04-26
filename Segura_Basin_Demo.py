@@ -379,7 +379,7 @@ MAP_STYLES = {
 
 selected_style = st.sidebar.selectbox("Base map", list(MAP_STYLES.keys()))
 selected_cmap  = st.sidebar.selectbox(
-    "Velocity colormap",
+    "Subsidence velocity colormap",
     list(COLORMAPS.keys()),
     disabled=velocity_data is None,
 )
@@ -405,8 +405,8 @@ show_geojson       = st.sidebar.toggle("Segura Basin boundary",              val
 show_gpkg          = st.sidebar.toggle("Well datapoints",                    value=True,  disabled=gpkg_geojson is None)
 show_velocity      = st.sidebar.toggle("Subsidence velocity",                value=True,  disabled=velocity_data is None)
 # ── NEW toggles ──────────────────────────────────────────────────────────────
-show_dist_clipped  = st.sidebar.toggle("Distance-weighted cost (Segura Basin)", value=False, disabled=dist_clipped_data is None)
-show_dist_full     = st.sidebar.toggle("Distance-weighted cost (full Segura area)",    value=False, disabled=dist_full_data is None)
+show_dist_clipped  = st.sidebar.toggle("Watershed (Segura Basin)", value=False, disabled=dist_clipped_data is None)
+show_dist_full     = st.sidebar.toggle("Watershed (Surrounding Segura area)",    value=False, disabled=dist_full_data is None)
 
 st.sidebar.divider()
 st.sidebar.subheader("Legend")
@@ -415,9 +415,9 @@ if geojson_data:
 if gpkg_geojson:
     st.sidebar.markdown("🟢 Registered Well Datapoints")
 #if dist_clipped_data:
-#    st.sidebar.markdown("🟠 Distance-weighted uphill (clipped)")
+#    st.sidebar.markdown("🟠 Watershed (clipped)")
 #if dist_full_data:
-#    st.sidebar.markdown("🔵 Distance-weighted uphill (full basin)")
+#    st.sidebar.markdown("🔵 Watershed (Surrounding Segura area)")
 
 
 # --- Render ---
