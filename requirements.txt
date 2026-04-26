@@ -2,3 +2,5 @@ streamlit
 pydeck
 pandas
 shapely
+rasterio
+Pillow

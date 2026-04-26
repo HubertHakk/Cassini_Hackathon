@@ -32,6 +32,8 @@ the Tagus-Segura Transfer (TST), wastewater reuse, and desalination — yet thes
 are insufficient to meet authorised demands.
 """)
 
+
+
 st.markdown("""
 <div style="background-color: #c0392b; border-radius: 6px; padding: 0.85rem 1.1rem; color: white;">
     <strong>⚠️ Structural water deficit</strong><br>
@@ -81,6 +83,34 @@ st.markdown("""
     extraction rates across the basin.
 </div>
 """, unsafe_allow_html=True)
+
+st.header("Why is solving this problem important?")
+
+st.markdown("""
+    <div style="
+        background-color: #8cc5e3;
+        border-radius: 20px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        color: white;
+            ">
+    Unregistered wells can lead to over-extraction of groundwater, which in turn can cause land subsidence, reduced water quality, and depletion of water resources.\
+             By identifying and monitoring these wells, governments struggling with water management can better manage water resources and mitigate potential environmental impacts.
+    <br><br>More specifically, in the Segura River Basin, water scarcity is a significant issue, with the sustainable rate of water extraction from the Segura Basin aquifers\
+             being exceeded 3- or 4-fold. Moreover, unregistered wells - which are estimated to account for around 45% of all extracted ground water\
+             in the area -contribute to the over-extraction of groundwater. By using Well-D, we aim to help identify these wells and support\
+              sustainable water management in the region.
+    <br><br>The Water Authorities’ inability to stop this activity is due to lack of instruments for water management and law enforcement.\
+              In some cases, there is also a lack of political willingness to allow the strict application of the law, which would discourage the ever-increasing illegal use.\
+                Nevertheless, the main reason that water is abstracted illegally lies in the huge profits that are derived from its use (irrigation farming, urban development,\
+              tourism). Because of this, river basin authorities are under great economic and political pressure, especially in those areas where the problem is more severe\
+              (Andalusia, Castilla-La Mancha, Murcia, Valencia) resulting in illegal water use not being effectively tackled.
+    <br><br>Thus, Well-D is designed to provide a cost-effective and scalable solution for detecting unregistered wells, enabling authorities to take informed actions\
+              to manage water resources sustainably - even at a more central level of the Spanish central government, bypassing traditional limitations of relying on local enforcement.
+    </div>
+""", unsafe_allow_html=True)
+
+st.space("small")
 
 # --- Geography ---
 st.subheader("Geography & Climate")
