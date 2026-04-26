@@ -289,15 +289,15 @@ if "selected_date" not in st.session_state:
 
 # --- Time slider ---
 
-selected_date = st.select_slider(
-    "Select date",
-    options=["2021-01-01", "2022-01-01", "2023-01-01"],          # replace with your actual date list when available
-    value=None,
-    disabled=False,       # disabled until time-based data is loaded
-    help="Time selection will be enabled when temporal data is available."
-)
+#selected_date = st.select_slider(
+#    "Select date",
+#    options=["2021-01-01", "2022-01-01", "2023-01-01"],          # replace with your actual date list when available
+#    value=None,
+#    disabled=False,       # disabled until time-based data is loaded
+#    help="Time selection will be enabled when temporal data is available."
+#)
 
-st.session_state.selected_date = selected_date
+#st.session_state.selected_date = selected_date
 
 # --- Sidebar ---
 st.sidebar.title("Map Colour Scheme")
