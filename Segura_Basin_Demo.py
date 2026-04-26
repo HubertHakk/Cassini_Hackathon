@@ -386,13 +386,13 @@ selected_cmap  = st.sidebar.selectbox(
 
 # ── NEW: separate colormaps for the two distance layers ──────────────────────
 selected_cmap_dist_clipped = st.sidebar.selectbox(
-    "Distance (clipped) colormap",
+    "Watershed (Segura Basin) colormap",
     list(COLORMAPS.keys()),
     index=4,           # defaults to "YlOrRd" — a sequential map that suits cost rasters
     disabled=dist_clipped_data is None,
 )
 selected_cmap_dist_full = st.sidebar.selectbox(
-    "Distance (full basin) colormap",
+    "Watershed (Surrounding Segura area) colormap",
     list(COLORMAPS.keys()),
     index=5,           # defaults to "Blues"
     disabled=dist_full_data is None,
